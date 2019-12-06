@@ -1,0 +1,19 @@
+minimum_pre_commit_version: 1.0.0
+repos:
+  - repo: git://github.com/ambv/black
+    rev: stable
+    hooks:
+      - id: black
+        language_version: python3.7
+  - repo: git://github.com/pre-commit/pre-commit-hooks
+    rev: v2.2.3
+    hooks:
+      - id: check-added-large-files
+        args: [--maxkb=800]
+      - id: debug-statements
+      - id: flake8
+        args: [--max-line-length=88]
+  - repo: git://github.com/prettier/prettier
+    rev: 1.19.1
+    hooks:
+      - id: prettier
