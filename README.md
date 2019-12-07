@@ -12,20 +12,18 @@ See the template [repo](https://github.com/br3ndonland/full-stack-fastapi-postgr
 
 ## Stack
 
+### Back-end
+
+- [FastAPI](fastapi.tiangolo.com/) is used as the back-end Python framework.
+- PostgreSQL is used as the database.
+- The application runs in several Docker containers using [Docker Compose](https://docs.docker.com/compose/), [Docker Stacks](https://docs.docker.com/compose/bundles/), and [Docker Swarm](https://dockerswarm.rocks/).
+- Asynchronous background jobs can be run with [Celery](https://pypi.org/project/celery/) and [RabbitMQ](https://www.rabbitmq.com/).
+
 ### Front-end
 
 - [Vue CLI](https://cli.vuejs.org/) 4 provides the base front-end application.
 - [Vuetify](https://vuetifyjs.com/en/) provides a material design user interface component framework.
 - The Vue.js components are built with [TypeScript](https://www.typescriptlang.org/).
-
-### Back-end
-
-- [FastAPI](fastapi.tiangolo.com/) is used as the back-end Python framework.
-- PostgreSQL is used as the database.
-
-### Infrastructure
-
-- The application runs in several Docker containers using [Docker Compose](https://docs.docker.com/compose/), [Docker Stacks](https://docs.docker.com/compose/bundles/), and [Docker Swarm](https://dockerswarm.rocks/).
 
 ## Quickstart
 
