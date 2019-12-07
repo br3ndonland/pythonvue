@@ -7,17 +7,14 @@
   - [Set up SSH](#set-up-ssh)
   - [Clone or fork the repository](#clone-or-fork-the-repository)
   - [Branch](#branch)
+  - [Pre-commit](#pre-commit)
   - [Commit](#commit)
-  - [Push](#push)
   - [Pull](#pull)
-  - [Git pre commit hooks](#git-pre-commit-hooks)
-- [Vue.js, JavaScript, and TypeScript](#vuejs-javascript-and-typescript)
-- [Markdown](#markdown)
-- [Python](#python)
-  - [VSCode](#vscode)
-  - [Pipenv](#pipenv)
-  - [pre commit](#pre-commit)
-  - [Python code style](#python-code-style)
+  - [Push](#push)
+  - [Pull requests](#pull-requests)
+- [Code tooling](#code-tooling)
+  - [Python](#python)
+  - [Web code](#web-code)
 - [Docker](#docker)
   - [Docker background](#docker-background)
   - [Pipenv and Docker](#pipenv-and-docker)
@@ -28,18 +25,12 @@
 
 - Sign up for [GitHub](https://github.com) if you haven't already.
 - Install Git
-  - Mac:
-    - Install [Homebrew](https://brew.sh/).
-    - Install Git via Homebrew on the command line: `brew install git`
+  - Mac: install [Homebrew](https://brew.sh/), then install Git via Homebrew on the command line: `brew install git`
   - See the [Git Downloads page](https://git-scm.com/downloads) for more options.
   - _Why use Git?_ It allows for maintenance of separate sets of the same code (branches), each with the ability to track and undo changes in high detail.
 - The [GitHub Desktop](https://desktop.github.com/) git client provides a user interface that can make Git easier.
-- Install Git extensions for your text editor:
-  - [Atom](https://atom.io/): [Git and GitHub support](https://github.atom.io/) built-in.
-  - [Sublime Text](http://www.sublimetext.com/): [GitSavvy](https://packagecontrol.io/packages/GitSavvy)
-  - [vscode](https://code.visualstudio.com/): [Git support](https://code.visualstudio.com/Docs/editor/versioncontrol) built in.
-- Git and GitHub resources:
-  - [Git docs](https://git-scm.com/)
+- Install Git extensions for your text editor. [VSCode](https://code.visualstudio.com/) has [Git support](https://code.visualstudio.com/Docs/editor/versioncontrol) built in.
+- See the free [Pro Git book](https://git-scm.com/book/en/v2) for more.
 
 ### Set up SSH
 
@@ -47,14 +38,14 @@
 
 [Connecting to GitHub with SSH](https://help.github.com/articles/connecting-to-github-with-ssh/) allows your computer to send information to GitHub over an SSH connection, so you can push changes without having to provide your username and password every time. These steps should only need to be performed once. These steps will allow your computer to connect to GitHub with SSH, and should only need to be performed once for each machine.
 
-- Ensure user name and email are set locally in Git as described in [Configuration](#configuration).
+- Ensure user name and email are set locally in your _[.gitconfig](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration)_.
 - [Generate an SSH key and add it to the SSH agent](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/)
 
   ```sh
-  $ touch ~/.ssh/config
-  $ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
-  $ eval "$(ssh-agent -s)"
-  $ ssh-add -K ~/.ssh/id_rsa
+  touch ~/.ssh/config
+  ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+  eval "$(ssh-agent -s)"
+  ssh-add -K ~/.ssh/id_rsa
   ```
 
   - The config file may need to be manually created with `touch ~/.ssh/config` first.
@@ -62,7 +53,7 @@
 - [Add SSH key to GitHub account](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/)
 
   ```sh
-  $ pbcopy < ~/.ssh/id_rsa.pub
+  pbcopy < ~/.ssh/id_rsa.pub
   ```
 
   - Go to GitHub and paste the key.
@@ -70,7 +61,7 @@
 - [Check SSH connection](https://help.github.com/articles/testing-your-ssh-connection/)
 
   ```sh
-  $ ssh -T git@github.com
+  ssh -T git@github.com
   ```
 
   - Verify it looks similar to the link above, type `yes`, verify username.
@@ -81,14 +72,11 @@
 - In addition to setting up your account globally to use SSH, each new repository will need to be configured to push with SSH instead of HTTPS:
 
   ```sh
-  $ cd path/to/repo
-  $ git remote set-url origin git@github.com:USERNAME/REPOSITORY.git
+  cd path/to/repo
+  git remote set-url origin git@github.com:USERNAME/REPOSITORY.git
   ```
 
 - Git remotes can be viewed with `git remote -v`.
-- Make a commit described in [commit](#commit).
-- Push the commit as described in [push](#push).
-- BOOM! That should work! You should see the push reflected on GitHub.
 
 ### Clone or fork the repository
 
@@ -107,11 +95,11 @@
 
 ### Branch
 
-- **We're currently working directly on the `master` branch.**
-- More complex projects frequently use two long-running branches, `master` and `dev`.
+- This project uses two long-running branches, `master` and `develop`.
 
-  - Commits to `master` and `dev` are usually merge commits from feature branches.
-  - Changes are made on temporary feature branches and merged into `dev` with [pull requests](#pull-requests). Guidelines for feature branches:
+  - Commits to `master` are usually tagged releases from `develop`.
+  - Commits to `develop` are usually merge commits from feature branches.
+  - Changes are made on temporary feature branches and merged into `develop` with [pull requests](#pull-requests). Guidelines for feature branches:
 
     - Use a clear, descriptive name for your branch.
     - Prefix the branch name with your initials to indicate that it should be unshared. Other contributors will not add commits to the branch.
@@ -123,12 +111,25 @@
 
 - Pull with rebase to keep branches and forks in sync. Bring in changes from GitHub with `git pull --rebase origin branchname`. This provides a nice linear commit history without unnecessary merge commits.
 
+### Pre-commit
+
+- [Git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) are managed with [pre-commit](https://pre-commit.com/).
+- Install pre-commit on your system with a package manager, such as [Homebrew](https://brew.sh/) or [pipx](https://pipxproject.github.io/pipx/). After cloning the repository, enter the Python virtual environment and install pre-commit:
+
+  ```sh
+  brew install pre-commit
+  cd path/to/repo
+  pre-commit install
+  ```
+
+- Each time you commit, pre-commit will run the Git hooks on your code.
+
 ### Commit
 
 After saving files, changes need to be committed to the Git repository.
 
 - GitHub Desktop provides a user interface to make this easy.
-- Command line commits: Simply writing `git commit` instead of `git commit -m "message"` opens the text editor.
+- Command line commits: Simply writing `git commit` instead of `git commit -m "message"` opens the text editor specified in your _[.gitconfig](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration)_.
 
   ```sh
   git add --all
@@ -158,17 +159,24 @@ After saving files, changes need to be committed to the Git repository.
    - Lines need to be manually wrapped at 72 characters
    ```
 
-### Push
-
-- Changes from forks can be incorporated into the `upstream master` (the original repository) with [pull requests](https://help.github.com/articles/about-pull-requests/). A pull request asks the owner of the master repository to merge changes from the requester's branch or fork to the master repository.
-  - Select "New pull request" on the master repository's GitHub page.
-  - If you forked the repository, select "Compare across forks." The base fork is the location in the master repository where the changes will go. The head fork is your fork where the changes are located.
-
 ### Pull
 
 - Local repositories and forks can be kept in sync with upstream repositories by pulling with rebase. Run `git pull --rebase upstream master`. This keeps the commit history in line with upstream. See the [thoughtbot keeping a GitHub fork updated](https://robots.thoughtbot.com/keeping-a-github-fork-updated) article for a simple explanation.
 - Pulls can also be made with merge commits. See the [GitHub Syncing a Fork article](https://help.github.com/articles/syncing-a-fork/). This will allow more separation between local and upstream changes, but will add merge commits. The commit history will diverge from upstream.
 - We don't have a specific policy on pulling with rebase vs. merge commits at this time.
+
+### Push
+
+Pushing sends local changes to your remote.
+
+### Pull requests
+
+Changes from forks can be incorporated into the `upstream master` (the original repository) with [pull requests](https://help.github.com/articles/about-pull-requests/). A pull request asks the owner of the master repository to merge changes from the requester's branch or fork to the master repository.
+
+#### Opening pull requests
+
+- Select "New pull request" on the master repository's GitHub page.
+- If you forked the repository, select "Compare across forks." The base fork is the location in the master repository where the changes will go. The head fork is your fork where the changes are located.
 
 #### Best practices for pull requests
 
@@ -179,30 +187,19 @@ After saving files, changes need to be committed to the Git repository.
   - List changes with bullet points.
   - Reference other pull requests that may be superseded by this request.
 
-### Git pre commit hooks
+## Code tooling
 
-See [pre-commit](#pre-commit).
+### Python
 
-## Vue.js, JavaScript, and TypeScript
+#### Python code style
 
-- Vue.js, JavaScript, and TypeScript have been autoformatted with [Prettier](https://prettier.io/) using the configurations in _frontend/.prettierrc_ and _frontend/tslint.json_.
+- Python 3 (modern Python) was used. Python 2 (legacy Python) is nearing its [end of life](https://pythonclock.org/).
+- Python code was linted with [Flake8](https://flake8.readthedocs.io/en/latest/) and autoformatted with [Black](https://black.readthedocs.io/en/stable/).
+- Black is still considered a pre-release. As described in [Pipenv](#pipenv), the `--dev` and `--pre` flags are needed to install Black within a Pipenv.
+- The [Black Git pre-commit hook](https://black.readthedocs.io/en/stable/version_control_integration.html) has been installed for this project.
+- In general, a [Pythonic](https://docs.python-guide.org/writing/style/) code style following the [Zen of Python](https://www.python.org/dev/peps/pep-0020/) should be used. [Foolish consistency](https://pep8.org) should be avoided.
 
-## Markdown
-
-- Markdown was written with the [Markdown All in One VSCode extension](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one), and autoformatted with [Prettier](https://prettier.io/) using the [Prettier VSCode extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode).
-- The [Prettier pre-commit hook](https://prettier.io/docs/en/precommit.html) was installed.
-
-## Python
-
-### VSCode
-
-- [Microsoft Visual Studio Code](https://code.visualstudio.com/) (VSCode) is a cross-platform open-source text editor with powerful Python features.
-- Helpful VSCode resources:
-  - [Python in Visual Studio Code](https://code.visualstudio.com/docs/languages/python)
-  - [Getting Started with Python in VS Code](https://code.visualstudio.com/docs/python/python-tutorial)
-  - [Editing Python in Visual Studio Code](https://code.visualstudio.com/docs/python/editing)
-
-### Pipenv
+#### Pipenv
 
 - **[Pipenv](https://pipenv.readthedocs.io/en/latest/)** was used to manage the development virtual environment for this project.
 
@@ -221,29 +218,27 @@ See [pre-commit](#pre-commit).
 
   - Activate the virtual environment with `pipenv shell`.
 
+#### VSCode
+
+- [Microsoft Visual Studio Code](https://code.visualstudio.com/) (VSCode) is a cross-platform open-source text editor with powerful Python features.
+- Helpful VSCode resources:
+  - [Python in Visual Studio Code](https://code.visualstudio.com/docs/languages/python)
+  - [Getting Started with Python in VS Code](https://code.visualstudio.com/docs/python/python-tutorial)
+  - [Editing Python in Visual Studio Code](https://code.visualstudio.com/docs/python/editing)
 - VSCode can be configured to recognize the Pipenv virtual environment. See [Using Python environments in VS Code](https://code.visualstudio.com/docs/python/environments).
   - _Command Palette -> Python: Select Interpreter_. Select virtual environment.
   - _Command Palette -> Python: Create Terminal_. Creates a terminal and automatically activates the virtual environment. If the virtual environment is set as the interpreter for the workspace, new terminal windows will automatically start in the virtual environment.
 
-### pre commit
+### Web code
 
-- Git pre-commit hooks are managed with [pre-commit](https://pre-commit.com/).
-- After cloning the repository, enter the Python virtual environment and install pre-commit:
-
-  ```sh
-  ❯ cd path/to/repo
-  ❯ pipenv install --dev
-  ❯ pipenv shell
-  template-python-hash ❯ pre-commit install
-  ```
-
-### Python code style
-
-- Python 3 (modern Python) was used. Python 2 (legacy Python) is nearing its [end of life](https://pythonclock.org/).
-- Python code was linted with [Flake8](https://flake8.readthedocs.io/en/latest/) and autoformatted with [Black](https://black.readthedocs.io/en/stable/).
-- Black is still considered a pre-release. As described in [Pipenv](#pipenv), the `--dev` and `--pre` flags are needed to install Black within a Pipenv.
-- The [Black Git pre-commit hook](https://black.readthedocs.io/en/stable/version_control_integration.html) has been installed for this project.
-- In general, a [Pythonic](https://docs.python-guide.org/writing/style/) code style following the [Zen of Python](https://www.python.org/dev/peps/pep-0020/) should be used. [Foolish consistency](https://pep8.org) should be avoided.
+- JavaScript, Markdown, TypeScript, Vue.js, YAML have been autoformatted with [Prettier](https://prettier.io/) and the [Prettier VSCode extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode).
+- Prettier is preferred because:
+  - It requires less configuration than ESLint or TSLint.
+  - It can install globally without a _package.json_ (can be installed system-wide, as opposed to in a specific repo)
+  - It can format more code languages than other formatters, such as CSS, Markdown, and YAML.
+- Prettier configurations are found in _frontend/.prettierrc_ (main config file) and _frontend/tslint.json_ (config file to [integrate Prettier and TSLint](https://prettier.io/docs/en/integrating-with-linters.html#tslint)).
+- The [Prettier pre-commit hook](https://prettier.io/docs/en/precommit.html) was installed.
+- Markdown was also written with the [Markdown All in One VSCode extension](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one)
 
 ## Docker
 
