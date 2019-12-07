@@ -10,6 +10,8 @@ cookiecutter https://github.com/br3ndonland/full-stack-fastapi-postgresql
 
 See the template [repo](https://github.com/br3ndonland/full-stack-fastapi-postgresql) and [wiki](https://github.com/br3ndonland/full-stack-fastapi-postgresql/wiki) for more details on how to use the project.
 
+See [CONTRIBUTING.md](./.github/CONTRIBUTING.md) for development methods and instructions for contributing to the project.
+
 ## Stack
 
 ### Back-end
