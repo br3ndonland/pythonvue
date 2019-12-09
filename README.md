@@ -1,5 +1,7 @@
 # Full-stack Python and Vue.js application
 
+v2019.12.09001
+
 ## Description
 
 This project was generated using a [Cookiecutter](https://cookiecutter.readthedocs.io/en/latest/) template at [br3ndonland/full-stack-fastapi-postgresql](https://github.com/br3ndonland/full-stack-fastapi-postgresql) with:
@@ -52,11 +54,9 @@ Now you can open your browser and interact with these URLs:
 - Flower, administration of Celery tasks: http://localhost:5555
 - Traefik UI, to see how the routes are being handled by the proxy: http://localhost:8090
 
-### Front-end requirements
+### Optional front-end setup
 
-- Node.js (with `npm`)
-
-### Front-end instructions
+Requires Node.js (with `npm`)
 
 Enter the `frontend` directory, install the NPM packages and start the live server using the `npm` scripts:
 
