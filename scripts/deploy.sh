@@ -20,5 +20,5 @@ DOMAIN=${DOMAIN} \
   config >docker-stack.yml
 
 docker-auto-labels docker-stack.yml
-docker network create --driver=overlay traefik-public
+docker network create --driver=overlay "$TRAEFIK_PUBLIC_NETWORK"
 docker stack deploy -c docker-stack.yml --with-registry-auth "${STACK_NAME}"
