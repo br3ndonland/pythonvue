@@ -3,8 +3,8 @@
 # Exit in case of error
 set -e
 
-TAG=${TAG} \
+TAG=${TAG?Variable not set} \
 FRONTEND_ENV=${FRONTEND_ENV-production} \
-source ./scripts/build.sh
+sh ./scripts/build.sh
 
-docker-compose -f docker-stack.yml push
+docker-compose -f docker-compose.yml push
