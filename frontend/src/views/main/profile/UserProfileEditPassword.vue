@@ -8,18 +8,11 @@
         <template>
           <div class="my-3">
             <div class="subheading secondary--text text--lighten-2">User</div>
-            <div
-              class="title primary--text text--darken-2"
-              v-if="userProfile.full_name"
-            >
-              {{ userProfile.full_name }}
-            </div>
-            <div class="title primary--text text--darken-2" v-else>
-              {{ userProfile.email }}
-            </div>
+            <div class="title primary--text text--darken-2" v-if="userProfile.full_name">{{userProfile.full_name}}</div>
+            <div class="title primary--text text--darken-2" v-else>{{userProfile.email}}</div>
           </div>
           <v-form ref="form">
-            <v-text-field
+            <v-text-field 
               type="password"
               ref="password"
               label="Password"
@@ -28,8 +21,7 @@
               data-vv-rules="required"
               v-validate="'required'"
               v-model="password1"
-              :error-messages="errors.first('password')"
-            >
+              :error-messages="errors.first('password')">
             </v-text-field>
             <v-text-field
               type="password"
@@ -40,8 +32,7 @@
               data-vv-as="password"
               v-validate="'required|confirmed:password'"
               v-model="password2"
-              :error-messages="errors.first('password_confirmation')"
-            >
+              :error-messages="errors.first('password_confirmation')">
             </v-text-field>
           </v-form>
         </template>
@@ -57,38 +48,38 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator"
-import { Store } from "vuex"
-import { IUserProfileUpdate } from "@/interfaces"
-import { readUserProfile } from "@/store/main/getters"
-import { dispatchUpdateUserProfile } from "@/store/main/actions"
+import { Component, Vue } from 'vue-property-decorator';
+import { Store } from 'vuex';
+import { IUserProfileUpdate } from '@/interfaces';
+import { readUserProfile } from '@/store/main/getters';
+import { dispatchUpdateUserProfile } from '@/store/main/actions';
 
 @Component
 export default class UserProfileEdit extends Vue {
-  public valid = true
-  public password1 = ""
-  public password2 = ""
+  public valid = true;
+  public password1 = '';
+  public password2 = '';
 
   get userProfile() {
-    return readUserProfile(this.$store)
+    return readUserProfile(this.$store);
   }
 
   public reset() {
-    this.password1 = ""
-    this.password2 = ""
-    this.$validator.reset()
+    this.password1 = '';
+    this.password2 = '';
+    this.$validator.reset();
   }
 
   public cancel() {
-    this.$router.back()
+    this.$router.back();
   }
 
   public async submit() {
     if (await this.$validator.validateAll()) {
-      const updatedProfile: IUserProfileUpdate = {}
-      updatedProfile.password = this.password1
-      await dispatchUpdateUserProfile(this.$store, updatedProfile)
-      this.$router.push("/main/profile")
+      const updatedProfile: IUserProfileUpdate = {};
+      updatedProfile.password = this.password1;
+      await dispatchUpdateUserProfile(this.$store, updatedProfile);
+      this.$router.push('/main/profile');
     }
   }
 }
