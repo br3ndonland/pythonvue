@@ -1,37 +1,17 @@
-from pydantic import BaseModel
+from typing import TYPE_CHECKING
+
+from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
+
+from app.db.base_class import Base
+
+if TYPE_CHECKING:
+    from .user import User  # noqa: F401
 
 
-# Shared properties
-class ItemBase(BaseModel):
-    title: str = None
-    description: str = None
-
-    class Config:
-        orm_mode = True
-
-
-# Properties to receive on item creation
-class ItemCreate(ItemBase):
-    title: str
-
-
-# Properties to receive on item update
-class ItemUpdate(ItemBase):
-    pass
-
-
-# Properties shared by models stored in DB
-class ItemInDBBase(ItemBase):
-    id: int
-    title: str
-    owner_id: int
-
-
-# Properties to return to client
-class Item(ItemInDBBase):
-    pass
-
-
-# Properties properties stored in DB
-class ItemInDB(ItemInDBBase):
-    pass
+class Item(Base):
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, index=True)
+    description = Column(String, index=True)
+    owner_id = Column(Integer, ForeignKey("user.id"))
+    owner = relationship("User", back_populates="items")

@@ -1,14 +1,16 @@
-import requests
+from typing import Dict
 
-from app.core import config
-from app.tests.utils.utils import get_server_api
+from fastapi.testclient import TestClient
+
+from app.core.config import settings
 
 
-def test_celery_worker_test(superuser_token_headers):
-    server_api = get_server_api()
+def test_celery_worker_test(
+    client: TestClient, superuser_token_headers: Dict[str, str]
+) -> None:
     data = {"msg": "test"}
-    r = requests.post(
-        f"{server_api}{config.API_V1_STR}/utils/test-celery/",
+    r = client.post(
+        f"{settings.API_V1_STR}/utils/test-celery/",
         json=data,
         headers=superuser_token_headers,
     )
