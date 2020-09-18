@@ -26,7 +26,7 @@ build-stag:
   tags:
     - build
     - test
-
+    
 build-prod:
   stage: build
   script:
@@ -39,16 +39,16 @@ build-prod:
 
 deploy-stag:
   stage: deploy
-  script:
+  script: 
     - >
-      DOMAIN=stag.pythonvue.br3ndonland.com
-      TRAEFIK_TAG=stag.pythonvue.br3ndonland.com
-      STACK_NAME=stag-pythonvue-br3ndonland-com
+      DOMAIN=staging.pythonvue.bws.codes
+      TRAEFIK_TAG=staging.pythonvue.bws.codes
+      STACK_NAME=staging-pythonvue-bws-codes
       TAG=stag
       sh ./scripts/deploy.sh
   environment:
     name: staging
-    url: https://stag.pythonvue.br3ndonland.com
+    url: https://staging.pythonvue.bws.codes
   only:
     - master
   tags:
@@ -59,14 +59,14 @@ deploy-prod:
   stage: deploy
   script:
     - >
-      DOMAIN=pythonvue.br3ndonland.com
-      TRAEFIK_TAG=pythonvue.br3ndonland.com
-      STACK_NAME=pythonvue-br3ndonland-com
+      DOMAIN=pythonvue.bws.codes
+      TRAEFIK_TAG=pythonvue.bws.codes
+      STACK_NAME=pythonvue-bws-codes
       TAG=prod
       sh ./scripts/deploy.sh
   environment:
     name: production
-    url: https://pythonvue.br3ndonland.com
+    url: https://pythonvue.bws.codes
   only:
     - production
   tags:
