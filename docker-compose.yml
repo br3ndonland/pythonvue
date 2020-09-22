@@ -12,7 +12,7 @@ services:
       - --providers.docker
       # Add a constraint to only use services with the label for this stack
       # from the env var TRAEFIK_TAG
-      - --providers.docker.constraints=Label(`traefik.constraint-label-stack`, `${TRAEFIK_TAG?Variable not set}`)
+      - --providers.docker.constraints=Label(`traefik.constraint-label-stack`, `pythonvue.bws.codes`)
       # Do not expose all Docker services, only the ones explicitly exposed
       - --providers.docker.exposedbydefault=false
       # Enable Docker Swarm mode
@@ -77,8 +77,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.labels.${STACK_NAME?Variable not set}.app-db-data == true
-
+          - node.labels.pythonvue-bws-codes.app-db-data == true
   pgadmin:
     image: dpage/pgadmin4
     networks:
