@@ -6,7 +6,7 @@ services:
       - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
       - default
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:rw
     command:
       # Enable Docker in Traefik, so that it reads labels from Docker services
       - --providers.docker
@@ -69,7 +69,7 @@ services:
   db:
     image: postgres:12
     volumes:
-      - app-db-data:/var/lib/postgresql/data/pgdata
+      - app-db-data:/var/lib/postgresql/data/pgdata:rw
     env_file:
       - .env
     environment:
