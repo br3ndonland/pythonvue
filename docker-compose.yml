@@ -139,10 +139,8 @@ services:
     env_file:
       - .env
     environment:
-      - SERVER_NAME=${DOMAIN?Variable not set}
-      - SERVER_HOST=https://${DOMAIN?Variable not set}
-      # Allow explicit env var override for tests
-      - SMTP_HOST=${SMTP_HOST}
+      SERVER_HOST: https://pythonvue.bws.codes
+      SERVER_NAME: pythonvue.bws.codes
     build:
       context: ./backend
       dockerfile: backend.dockerfile
@@ -162,10 +160,8 @@ services:
     env_file:
       - .env
     environment:
-      - SERVER_NAME=${DOMAIN?Variable not set}
-      - SERVER_HOST=https://${DOMAIN?Variable not set}
-      # Allow explicit env var override for tests
-      - SMTP_HOST=${SMTP_HOST?Variable not set}
+      SERVER_HOST: https://pythonvue.bws.codes
+      SERVER_NAME: pythonvue.bws.codes
     build:
       context: ./backend
       dockerfile: celeryworker.dockerfile
