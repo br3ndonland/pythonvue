@@ -15,7 +15,7 @@ services:
       # Do not expose all Docker services, only the ones explicitly exposed
       - --providers.docker.exposedbydefault=false
       # Enable Docker Swarm mode
-      - --providers.docker.swarmmode
+      # - --providers.docker.swarmmode
       # Enable the access log, with HTTP requests
       - --accesslog
       # Enable the Traefik log, for configurations and errors
